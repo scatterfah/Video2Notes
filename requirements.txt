@@ -1,0 +1,5 @@
+opencv-python
+yt-dlp[default]
+reportlab
+pillow
+tqdm
