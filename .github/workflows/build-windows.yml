@@ -36,22 +36,28 @@ jobs:
           Invoke-WebRequest "https://github.com/denoland/deno/releases/latest/download/deno-x86_64-pc-windows-msvc.zip" -OutFile deno.zip
           Expand-Archive deno.zip -DestinationPath bin
 
-      - name: Build note.exe
+      - name: Build the app folder
         run: >
-          pyinstaller --onefile --noconsole --name note
+          pyinstaller --noconfirm --noconsole --name note
           --collect-all yt_dlp_ejs
           --add-binary "bin\ffmpeg.exe;."
           --add-binary "bin\deno.exe;."
           app.py
 
-      - name: Keep the build as a downloadable file
+      - name: Build the installer
+        shell: pwsh
+        run: |
+          choco install innosetup -y --no-progress
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
+
+      - name: Keep the installer as a downloadable file
         uses: actions/upload-artifact@v4
         with:
-          name: note-windows
-          path: dist/note.exe
+          name: Video2Notes-Setup
+          path: installer_output/Video2Notes-Setup.exe
 
-      - name: Attach note.exe to the GitHub Release
+      - name: Attach the installer to the GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/note.exe
+          files: installer_output/Video2Notes-Setup.exe
