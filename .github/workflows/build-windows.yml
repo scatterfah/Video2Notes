@@ -36,9 +36,14 @@ jobs:
           Invoke-WebRequest "https://github.com/denoland/deno/releases/latest/download/deno-x86_64-pc-windows-msvc.zip" -OutFile deno.zip
           Expand-Archive deno.zip -DestinationPath bin
 
+      - name: Create the app icon
+        run: python make_icon.py
+
       - name: Build the app folder
         run: >
           pyinstaller --noconfirm --noconsole --name note
+          --icon icon.ico
+          --add-data "icon.png;."
           --collect-all yt_dlp_ejs
           --add-binary "bin\ffmpeg.exe;."
           --add-binary "bin\deno.exe;."

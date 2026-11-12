@@ -3,6 +3,7 @@ import queue
 import subprocess
 import sys
 import threading
+from pathlib import Path
 import tkinter as tk
 from tkinter import messagebox, ttk
 
@@ -35,12 +36,21 @@ class App(tk.Tk):
         self.title("YouTube Whiteboard Extractor")
         self.geometry("560x300")
         self.resizable(False, False)
+        self.set_icon()
 
         self.messages = queue.Queue()
         self.pdf_path = None
 
         self.build_widgets()
         self.after(100, self.check_messages)
+
+    def set_icon(self):
+        try:
+            base = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent))
+            self.app_icon = tk.PhotoImage(file=str(base / "icon.png"))
+            self.iconphoto(True, self.app_icon)
+        except Exception:
+            pass  # no icon file found: keep the default icon
 
     # ---------------- layout ----------------
 
