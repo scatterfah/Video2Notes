@@ -14,7 +14,7 @@ UninstallDisplayIcon={app}\note.exe
 SetupIconFile=icon.ico
 
 [Tasks]
-Name: "desktopicon"; Description: "Create a desktop shortcut"; Flags: unchecked
+Name: "desktopicon"; Description: "Create a desktop shortcut"
 
 [Files]
 Source: "dist\note\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
