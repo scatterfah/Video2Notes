@@ -16,6 +16,13 @@ if sys.stderr is None:
 
 import extractor  # our processing code (extractor.py)
 
+# What the user sees  ->  detail level used by the program
+DETAIL_CHOICES = [
+    ("One page per finished board", "final"),
+    ("Balanced (recommended)", "balanced"),
+    ("Detailed (more steps)", "detailed"),
+]
+
 
 def open_path(path):
     """Open a file or folder with the default program."""
@@ -34,7 +41,7 @@ class App(tk.Tk):
         super().__init__()
 
         self.title("YouTube Whiteboard Extractor")
-        self.geometry("560x300")
+        self.geometry("560x340")
         self.resizable(False, False)
         self.set_icon()
 
@@ -75,6 +82,20 @@ class App(tk.Tk):
 
         ttk.Button(row, text="Paste", width=7, command=self.paste_url).pack(side="left", padx=(6, 0))
 
+        detail_row = ttk.Frame(self)
+        detail_row.pack(fill="x", pady=(10, 0), **pad)
+
+        ttk.Label(detail_row, text="Detail level:").pack(side="left")
+
+        self.detail_var = tk.StringVar(value=DETAIL_CHOICES[1][0])
+        ttk.Combobox(
+            detail_row,
+            textvariable=self.detail_var,
+            values=[label for label, _ in DETAIL_CHOICES],
+            state="readonly",
+            width=34,
+        ).pack(side="left", padx=(8, 0))
+
         self.start_button = ttk.Button(self, text="Start", command=self.start)
         self.start_button.pack(pady=14)
 
@@ -111,9 +132,10 @@ class App(tk.Tk):
         self.progress["value"] = 0
         self.stage_var.set("Starting...")
 
-        threading.Thread(target=self.worker, args=(url,), daemon=True).start()
+        detail = dict(DETAIL_CHOICES).get(self.detail_var.get(), "balanced")
+        threading.Thread(target=self.worker, args=(url, detail), daemon=True).start()
 
-    def worker(self, url):
+    def worker(self, url, detail):
         """Runs in a background thread so the window never freezes."""
 
         def on_progress(stage, percent):
@@ -123,7 +145,7 @@ class App(tk.Tk):
             self.messages.put(("status", text))
 
         try:
-            pdf_path = extractor.process_video(url, on_progress, on_status)
+            pdf_path = extractor.process_video(url, on_progress, on_status, detail)
             self.messages.put(("done", pdf_path))
         except Exception as error:
             self.messages.put(("error", str(error)))

@@ -9,6 +9,8 @@ import yt_dlp
 from PIL import Image
 from tqdm import tqdm
 
+from dedup import DEFAULT_DETAIL, remove_redundant_screenshots
+
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
 
@@ -539,7 +541,7 @@ def create_pdf(output_dir):
 # 6. MAIN PROGRAM
 # ============================================================
 
-def process_video(url, on_progress=None, on_status=None):
+def process_video(url, on_progress=None, on_status=None, detail=DEFAULT_DETAIL):
     """
     Full pipeline: download -> analyze -> PDF.
     Used by both the terminal version and the window (GUI) version.
@@ -566,6 +568,7 @@ def process_video(url, on_progress=None, on_status=None):
     # Remove results of earlier runs so they don't mix into this PDF
     for old_file in list(video_output.glob("*.jpg")) + list(video_output.glob("*.pdf")):
         old_file.unlink()
+    shutil.rmtree(video_output / "skipped", ignore_errors=True)
 
     # Step 2: Make sure OpenCV can read it (converts AV1 if needed)
     status("Checking video format...")
@@ -578,7 +581,11 @@ def process_video(url, on_progress=None, on_status=None):
     if screenshot_count == 0:
         raise RuntimeError("No screenshots were extracted.")
 
-    # Step 4: Generate PDF
+    # Step 4: Remove duplicate and near-duplicate screenshots
+    status("Removing duplicate screenshots...")
+    remove_redundant_screenshots(video_output, detail, log=log)
+
+    # Step 5: Generate PDF
     status("Creating PDF...")
     pdf_path = create_pdf(video_output)
 
