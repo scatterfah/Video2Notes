@@ -14,7 +14,9 @@
 ![Downloads](https://img.shields.io/github/downloads/scatterfah/Video2Notes/total?style=flat-square&color=7c3aed)
 
 ### 🧠 Human brain + 🤖 AI = Video2Notes
-**Made by [Fahad](https://github.com/scatterfah)** 👨‍💻
+
+<a href="https://github.com/scatterfah"><img src="https://img.shields.io/badge/CREATED_BY-FAHAD-F43F5E?style=for-the-badge&logo=github&logoColor=white" alt="Created by Fahad"></a>
+<a href="https://www.anthropic.com"><img src="https://img.shields.io/badge/WITH_HELP_FROM-CLAUDE_AI-7C3AED?style=for-the-badge" alt="With help from Claude AI"></a>
 
 </div>
 
@@ -45,7 +47,19 @@ flowchart LR
 
 That's it. **Nothing else to install.** FFmpeg and everything else are already inside.
 
-> ⚠️ **Windows may warn you.** The app is not digitally signed yet (signing costs money or needs approval). If you see *"Windows protected your PC"*, click **More info → Run anyway**. On some computers, **Smart App Control** blocks unsigned apps completely. Getting the app signed is on the to-do list.
+> ⚠️ **Windows may warn you.** The app is not digitally signed yet. If you see *"Windows protected your PC"*, click **More info → Run anyway**.
+
+<details>
+<summary>🛡️ <b>Blocked completely by Smart App Control?</b></summary>
+
+On some Windows 11 computers, **Smart App Control** blocks unsigned apps and shows no "Run anyway" button. Your options:
+
+1. **Run from source** (see the section below). No installer is needed, but you must install Python, FFmpeg and Deno yourself.
+2. **Temporarily turn Smart App Control off** (Windows Security → App & browser control → Smart App Control settings), install the app, then turn it back on. Since the April 2026 Windows update this works without reinstalling Windows, but it is a security trade-off, and on some PCs the switch can be greyed out afterwards. Only do this if you are comfortable with it.
+
+Getting the app digitally signed is planned. That will remove this problem.
+
+</details>
 
 ## 🎛️ How to use it
 
@@ -64,6 +78,9 @@ That's it. **Nothing else to install.** FFmpeg and everything else are already i
 Screenshots removed as duplicates are moved to a `skipped` folder there. **Nothing is ever deleted**, so you can rescue any page.
 
 ## 🤝 Built by a human and an AI
+
+> [!IMPORTANT]
+> **Created by Fahad** 🧠 with the help of **AI** 🤖. The human had the idea, designed it and tested it. The AI helped write the code. Human brain + AI thinking, together.
 
 This project is a team effort, and we are not shy about it:
 
@@ -111,6 +128,6 @@ MIT. See [LICENSE](LICENSE). Bundled third-party software is listed in [THIRD_PA
 
 <div align="center">
 
-Made with 🧠 + 🤖 by **[Fahad](https://github.com/scatterfah)**
+### 💙 Made with 🧠 + 🤖 by [**FAHAD**](https://github.com/scatterfah) 💙
 
 </div>
