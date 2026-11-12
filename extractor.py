@@ -300,9 +300,9 @@ def detect_writing(video_path, output_dir, on_progress=None):
 
         while True:
 
-            success, frame = cap.read()
-
-            if not success:
+            # grab() moves to the next frame WITHOUT converting it to an image.
+            # That is much faster than read() for the frames we skip.
+            if not cap.grab():
                 break
 
             frame_number += 1
@@ -310,6 +310,11 @@ def detect_writing(video_path, output_dir, on_progress=None):
             # Analyze only selected frames
             if frame_number % frame_interval != 0:
                 continue
+
+            success, frame = cap.retrieve()
+
+            if not success:
+                break
 
             timestamp = frame_number / fps
 
@@ -403,14 +408,14 @@ def detect_writing(video_path, output_dir, on_progress=None):
             if content_ratio > CHANGE_THRESHOLD:
 
                 if activity_ratio > ACTIVITY_THRESHOLD:
-                    pending_frame = frame.copy()
+                    pending_frame = frame
 
                 elif pending_frame is None:
-                    pending_frame = frame.copy()
+                    pending_frame = frame
 
             # Keep the latest frame as a possible stable screenshot
             if pending_frame is not None:
-                last_stable_frame = frame.copy()
+                last_stable_frame = frame
 
             # Save after writing activity has stopped
             if (
